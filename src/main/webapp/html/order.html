@@ -1,0 +1,242 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+
+    <h3>Orders</h3>
+
+    <!-- Top row with form-->
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="input-order-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Insert Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" id="order-input-form">
+                        <div class="form-group">
+                            <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="barcode" placeholder="Enter Barcode" id="inputBarcode" required>
+                            </div>
+                        </div>
+                        &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+                        <br>
+                        <div class="form-group">
+                            <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" name="quantity" placeholder="Enter Quantity" id="inputQuantity" min="0" oninput="validity.valid||(value='');" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMrp" class="col-sm-2 col-form-label">Selling Price<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sellingPrice" placeholder="Enter Selling Price" id="inputMrp" required>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped" id="input-form-table">
+                        <thead class="table-head">
+                        <tr>
+                            <th scope="col">ProductId</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Selling Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+                    <button type="button" class="btn btn-primary" id="add-cart-order">AddToCart</button>
+                    <button type="button" class="btn btn-primary" id="add-order">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" id="insert-order">Add</button>
+    &nbsp;
+    <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+
+        <!-- Table -->
+        <div class="col-12 tableDiv">
+            <table class="table table-striped" id="order-table">
+                <thead class="table-head">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">DateTime</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Order Edit Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="edit-order-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" id="order-edit-form">
+                        <div class="form-group">
+                            <label for="updateInputBarcode" class="col-sm-2 col-form-label">Barcode<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="barcode" placeholder="Enter OrderId" id="updateInputBarcode" required >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateInputQuantity" class="col-sm-2 col-form-label">Quantity<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" name="quantity" placeholder="Enter Quantity" id="updateInputQuantity" min="0" oninput="validity.valid||(value='');" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateInputMrp" class="col-sm-2 col-form-label">Selling Price<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sellingPrice" placeholder="Enter Selling Price" id="updateInputMrp" required>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="orderId" >
+                        <div>
+                            <div style="display:inline-grid;width:280px"></div>
+                            <button type="submit" class="btn btn-primary" id="edit-add-button">AddItem</button>
+                        </div>
+
+                    </form>
+                    <table class="table table-striped" id="update-order-table">
+                        <thead class="table-head">
+                        <tr>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Selling Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
+<!--                    <button type="button" class="btn btn-primary" id="add-update-cart-order">AddToCart</button>-->
+                    <button type="button" class="btn btn-primary" id="update-order">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- OrderItem Edit Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="edit-orderItem-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit OrderItem</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" id="orderItem-edit-form">
+                        <div class="form-group">
+                            <label for="newQuantity" class="col-sm-2 col-form-label">Quantity<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" name="quantity" id="newQuantity" placeholder="Enter Quantity" min="0" oninput="validity.valid||(value='');" required>
+                                <p style="line-height:2em;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newSellingPrice" class="col-sm-2 col-form-label">Selling Price<span class="required">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sellingPrice" id="newSellingPrice" placeholder="Enter Selling Price" required>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" >
+                        <input type="hidden" name="barcode" >
+                        <div>
+                            <br>
+                            <div style="display:inline-grid;width:280px"></div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="update-orderItem">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Order- View- Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="view-order-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" id="view-order-table">
+                        <thead class="table-head">
+                        <tr>
+                            <th scope="col">ProductId</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Selling Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div> <!-- Container end-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:src="@{/static/order.js}"/></script>
+</body>
+
+</html>
