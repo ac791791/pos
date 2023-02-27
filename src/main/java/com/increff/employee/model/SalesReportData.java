@@ -4,8 +4,26 @@ public class SalesReportData {
 
     private String brand;
     private String category;
-    private String quantity;
-    private String revenue;
+    private int quantity;
+    private int revenue;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
+    }
+
+
 
     public String getBrand() {
         return brand;
@@ -23,19 +41,4 @@ public class SalesReportData {
         this.category = category;
     }
 
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getRevenue() {
-        return revenue;
-    }
-
-    public void setRevenue(String revenue) {
-        this.revenue = revenue;
-    }
 }

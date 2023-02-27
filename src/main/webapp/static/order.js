@@ -20,10 +20,11 @@ function toggleAdd(){
        cell1.innerHTML = barcode;
        cell2.innerHTML = quantity;
        cell3.innerHTML = mrp;
+       document.getElementById("order-input-form").reset();
   }
 
 function addOrderItem(){
-    console.log("check");
+
     var $form = $("#order-edit-form");
     var orderId = $("#order-edit-form input[name=orderId]").val();
     	var json = toJson($form);

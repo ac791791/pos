@@ -4,6 +4,7 @@ package com.increff.employee.controller;
 import java.util.List;
 
 import com.increff.employee.dto.InventoryDto;
+import com.increff.employee.service.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class InventoryController {
 
 	@ApiOperation(value = "Updating top Inventory")
 	@RequestMapping(method = RequestMethod.PUT)
-	public void topUpdate(@RequestBody InventoryForm form){
+	public void topUpdate(@RequestBody InventoryForm form) throws ApiException {
 		dto.topUpdate(form);
 	}
 

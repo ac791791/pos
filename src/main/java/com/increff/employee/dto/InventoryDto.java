@@ -4,6 +4,7 @@ import com.increff.employee.model.InventoryData;
 import com.increff.employee.model.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
+import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,11 @@ public class InventoryDto {
         service.update(id, convert(form));
     }
 
-    public void topUpdate(InventoryForm form){
+    public void topUpdate(InventoryForm form) throws ApiException {
         ProductPojo productPojo= productService.get(form.getBarcode());
+        if(productPojo==null){
+            throw new ApiException("Couldn't Update: Product with given barcode do not exist");
+        }
         int id= productPojo.getId();
         service.update(id,convert(form));
     }
