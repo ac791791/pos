@@ -2,6 +2,7 @@ package com.increff.employee.service;
 
 import com.increff.employee.dto.AbstractUnitTest;
 import com.increff.employee.model.ProductForm;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,8 @@ public class ProductServiceTest extends AbstractUnitTest {
 
     @Autowired
     private ProductService service;
+    @Autowired
+    private InventoryService inventoryService;
 
     private final String barcode="b1000";
     private final int brandCategory=1;
@@ -30,6 +33,8 @@ public class ProductServiceTest extends AbstractUnitTest {
         p.setName(name);
         p.setMrp(mrp);
         service.add(p);
+
+
     }
 
     @Test
@@ -74,5 +79,136 @@ public class ProductServiceTest extends AbstractUnitTest {
     }
 
 
+    @Test
+    public void testGetAll() throws ApiException {
+        List<ProductPojo> list=service.getAll();
+        int size= list.size();
 
+        assertEquals(1,size);
+
+        ProductPojo p = new ProductPojo();
+        p.setBarcode("barcode");
+        p.setbrandCategory(2);
+        p.setName("name");
+        p.setMrp(50.25);
+        service.add(p);
+
+        List<ProductPojo> list2=service.getAll();
+        int size2= list2.size();
+
+        assertEquals(2,size2);
+    }
+
+
+    @Test
+    public void testGetId(){
+        List<ProductPojo> list=service.getAll();
+
+        for(ProductPojo pojo: list){
+            ProductPojo p=service.get(pojo.getId());
+            assertEquals(barcode,p.getBarcode());
+            assertEquals(brandCategory,p.getbrandCategory());
+            assertEquals(name,p.getName());
+            assertEquals(mrp,p.getMrp(),0.01);
+        }
+    }
+
+    @Test
+    public void testGetBarcode(){
+        List<ProductPojo> list=service.getAll();
+
+        for(ProductPojo pojo: list){
+            ProductPojo p=service.get(pojo.getBarcode());
+            assertEquals(barcode,p.getBarcode());
+            assertEquals(brandCategory,p.getbrandCategory());
+            assertEquals(name,p.getName());
+            assertEquals(mrp,p.getMrp(),0.01);
+        }
+    }
+
+    @Test
+    public void testGetByBrandCategory() throws ApiException {
+        List<ProductPojo> list=service.getByBrandCategory(brandCategory);
+        int size= list.size();
+
+        assertEquals(1,size);
+
+        ProductPojo p = new ProductPojo();
+        p.setBarcode("barcode");
+        p.setbrandCategory(brandCategory);
+        p.setName("name");
+        p.setMrp(50.25);
+        service.add(p);
+
+        List<ProductPojo> list2=service.getAll();
+        int size2= list2.size();
+
+        assertEquals(2,size2);
+
+    }
+
+    @Test
+    public void testZeroInventory() throws ApiException {
+        List<ProductPojo> pojos=service.getAll();
+        for(ProductPojo pojo:pojos){
+            service.delete(pojo.getId());
+        }
+
+        List<ProductPojo> list=service.getByBrandCategory(brandCategory);
+        int size= list.size();
+
+        assertEquals(0,size);
+    }
+
+    @Test
+    public void testNonZeroInventory(){
+        List<ProductPojo> list=service.getAll();
+        for(ProductPojo pojo:list){
+            InventoryPojo inventoryPojo=new InventoryPojo();
+            inventoryPojo.setId(pojo.getId());
+            inventoryPojo.setQuantity(10);
+            inventoryService.update(pojo.getId(), inventoryPojo);
+        }
+
+        try {
+            List<ProductPojo> pojos=service.getAll();
+            for(ProductPojo pojo:pojos){
+                service.delete(pojo.getId());
+            }
+
+        }catch (ApiException e){
+            assertEquals("Couldn't Delete: Inventory is not Zero.",e.getMessage());
+        }
+
+
+    }
+
+    @Test
+    public void testUpdate(){
+        List<ProductPojo> list=service.getAll();
+
+        for (ProductPojo pojo: list){
+            ProductPojo p= new ProductPojo();
+            p.setBarcode(pojo.getBarcode());
+            p.setbrandCategory(pojo.getbrandCategory());
+            p.setName("puma");
+            p.setMrp(100.08);
+
+            service.update(pojo.getId(), p);
+
+            ProductPojo newPojo= service.get(pojo.getId());
+            assertEquals("puma",newPojo.getName());
+            assertEquals(100.08,newPojo.getMrp(),0.01);
+        }
+    }
+
+    @Test
+    public void testConvert(){
+        List<ProductPojo> list=service.getAll();
+        for(ProductPojo pojo:list){
+            InventoryPojo inventoryPojo= service.convert(pojo);
+            assertEquals(pojo.getId(),inventoryPojo.getId());
+            assertEquals(0,inventoryPojo.getQuantity());
+        }
+    }
 }

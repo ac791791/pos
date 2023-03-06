@@ -153,19 +153,40 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="deleteButtons" onclick="deleteProduct(' + e.id + ')">Delete</button>'
+		var nameLength= (e.name).length;
+        if(nameLength>20){
+        	var name=(e.name).slice(0,20)+'...';
+        }
+        else{ var name=e.name;}
+        var brandLength= (e.brand).length;
+        if(brandLength>20){
+        	var brand=(e.brand).slice(0,20)+'...';
+        }
+        else{ var brand=e.brand;}
+
+        var categoryLength=(e.category).length;
+        if(categoryLength>20){
+             var category=(e.category).slice(0,20)+'...';
+         }
+         else{ var category=e.category;}
+		var buttonHtml = '<button class="deleteButtons" onclick="confirmDelete(' + e.id + ')">Delete</button>'
 		buttonHtml += ' <button class="tableButtons" onclick="displayEditProduct(' + e.id + ')">Edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.barcode + '</td>'
-		+ '<td>'  + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.name + '</td>'
+		+ '<td>'  + brand + '</td>'
+		+ '<td>'  + category + '</td>'
+		+ '<td>'  + name + '</td>'
 		+ '<td>'  + parseFloat(e.mrp).toFixed(2) + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
 }
+function confirmDelete(id) {
+  if (confirm("Are you sure you want to delete this Product?")) {
+    deleteProduct(id);
+  }
+  }
 
 function displayEditProduct(id){
 	var url = getProductUrl() + "/" + id;
@@ -226,7 +247,7 @@ function displayBrandCategorySelect(brandCategoryList){
     brandCategorySelect.empty();
     brandCategorySelect.append("<option value=0 disabled selected>Choose  Brand/Category</option>");
     for(brand of brandCategoryList){
-        brandCategorySelect.append("<option value="+brand.id+">"+brand.brand+"/ "+brand.category+"</option>")
+        brandCategorySelect.append("<option value="+brand.id+">"+(brand.brand).slice(0,20)+" :: "+(brand.category).slice(0,20)+"</option>")
     }
 }
 

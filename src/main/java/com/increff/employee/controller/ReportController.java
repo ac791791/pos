@@ -1,7 +1,6 @@
 package com.increff.employee.controller;
 
-import com.increff.employee.model.SalesReportData;
-import com.increff.employee.model.SalesReportForm;
+import com.increff.employee.model.*;
 import com.increff.employee.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,5 +24,17 @@ public class ReportController {
     public List<SalesReportData> getSalesReport(@RequestBody SalesReportForm form){
 
         return service.getSalesReport(form);
+    }
+
+    @ApiOperation(value = "Getting Brand Report")
+    @RequestMapping(path = "api/report/brandReport", method = RequestMethod.POST)
+    public List<BrandReportData> getBrandReport(@RequestBody BrandReportForm form){
+        return service.getBrandReport(form);
+    }
+
+    @ApiOperation(value = "Getting inventory Report")
+    @RequestMapping(path = "api/report/inventoryReport", method = RequestMethod.POST)
+    public List<InventoryReportData> getInventoryReport(@RequestBody InventoryReportForm form){
+        return service.getInventoryReport(form);
     }
 }

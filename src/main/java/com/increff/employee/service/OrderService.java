@@ -17,15 +17,10 @@ public class OrderService {
     @Autowired
     private OrderItemService orderItemService;
 
-    @Transactional(rollbackOn = ApiException.class)
-    public void add(OrderPojo p, List<OrderItemPojo> pojos) throws ApiException {
 
+    @Transactional
+    public void addOrder(OrderPojo p){
         dao.insert(p);
-        for(OrderItemPojo pojo: pojos){
-            pojo.setOrderId(p.getId());
-            orderItemService.add(pojo);
-        }
-
     }
 
     @Transactional
@@ -41,9 +36,10 @@ public class OrderService {
     public List<OrderPojo> getAll(){
         return dao.selectAll();
     }
-
     @Transactional
-    public void update(int orderId, List<OrderItemPojo> pojos) throws ApiException {
-
+    public OrderPojo getMaxId(){
+        return dao.selectMaxId();
     }
+
+
 }

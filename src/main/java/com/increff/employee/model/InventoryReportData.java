@@ -1,8 +1,8 @@
 package com.increff.employee.model;
 
-public class InventoryReportData extends BrandData{
+public class InventoryReportData extends InventoryReportForm{
 
-    private int quantity;
+    public int quantity;
 
     public int getQuantity() {
         return quantity;
@@ -11,5 +11,4 @@ public class InventoryReportData extends BrandData{
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 }

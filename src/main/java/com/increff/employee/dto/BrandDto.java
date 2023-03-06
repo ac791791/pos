@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.increff.employee.util.ConvertFunction.*;
+
 @Repository
 public class BrandDto {
 
@@ -48,26 +50,9 @@ public class BrandDto {
         BrandPojo p= convert(form);
         normalize(p);
         service.update(id, p);
-
     }
 
 
-
-    //Conversion functions
-    protected BrandData convert(BrandPojo p) {
-        BrandData d = new BrandData();
-        d.setId(p.getId());
-        d.setBrand(p.getBrand());
-        d.setCategory(p.getCategory());
-        return d;
-    }
-
-    protected BrandPojo convert(BrandForm f) {
-        BrandPojo p= new BrandPojo();
-        p.setBrand(f.getBrand());
-        p.setCategory(f.getCategory());
-        return p;
-    }
     protected static void normalize(BrandPojo p) {
         p.setBrand(StringUtil.toLowerCase(p.getBrand()));
 

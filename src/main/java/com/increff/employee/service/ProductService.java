@@ -77,7 +77,7 @@ public class ProductService {
 		dao.update(ex);
 	}
 
-	private InventoryPojo convert(ProductPojo p){
+	protected InventoryPojo convert(ProductPojo p){
 		InventoryPojo ip= new InventoryPojo();
 		ip.setId(p.getId());
 		ip.setQuantity(0);

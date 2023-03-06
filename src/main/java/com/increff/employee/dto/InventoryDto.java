@@ -9,8 +9,7 @@ import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import static com.increff.employee.util.ConvertFunction.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +24,30 @@ public class InventoryDto {
 
 
     public InventoryData get(int id) {
-        return convert(service.get(id));
+        InventoryData d=inventoryConvert(service.get(id));
+        ProductPojo productPojo= productService.get(d.getId());
+        d.setName(productPojo.getName());
+        d.setBarcode(productPojo.getBarcode());
+        return d;
+
     }
 
     public List<InventoryData> getAll(){
         List<InventoryData> list1= new ArrayList<InventoryData>();
         List<InventoryPojo> list2 = service.getAll();
         for(InventoryPojo p: list2) {
-            list1.add(convert(p));
+            InventoryData d=inventoryConvert(p);
+            ProductPojo productPojo= productService.get(d.getId());
+            d.setName(productPojo.getName());
+            d.setBarcode(productPojo.getBarcode());
+            list1.add(d);
         }
         return list1;
 
     }
 
     public void update(int id,InventoryForm form) {
-        service.update(id, convert(form));
+        service.update(id, inventoryConvert(form));
     }
 
     public void topUpdate(InventoryForm form) throws ApiException {
@@ -48,26 +56,9 @@ public class InventoryDto {
             throw new ApiException("Couldn't Update: Product with given barcode do not exist");
         }
         int id= productPojo.getId();
-        service.update(id,convert(form));
+        service.update(id,inventoryConvert(form));
     }
 
-    private InventoryPojo convert(InventoryForm f) {
-        InventoryPojo p = new InventoryPojo();
-        p.setId(f.getId());
-        p.setQuantity(f.getQuantity());
-        return p;
-    }
-
-    private InventoryData convert(InventoryPojo p) {
-        InventoryData d= new InventoryData();
-        d.setId(p.getId());
-        d.setQuantity(p.getQuantity());
-
-        ProductPojo productPojo= productService.get(p.getId());
-        d.setName(productPojo.getName());
-        d.setBarcode(productPojo.getBarcode());
-        return d;
-    }
 
 }
 

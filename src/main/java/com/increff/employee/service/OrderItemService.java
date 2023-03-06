@@ -25,9 +25,15 @@ public class OrderItemService {
     public void add(OrderItemPojo p) throws ApiException {
         int productId=p.getProductId(); // Getting product id from OrderItemPojo
 
-        decreaseInventory(inventoryService.get(productId), p.getQuantity());
-        dao.insert(p);
 
+        ProductPojo productPojo=productService.get(productId);
+        if(p.getSellingPrice()>productPojo.getMrp()){
+            throw new ApiException("Selling Price Can't be greater than Mrp");
+        }
+        else {
+            decreaseInventory(inventoryService.get(productId), p.getQuantity());
+            dao.insert(p);
+        }
     }
     @Transactional
     public void delete(int orderId) {
@@ -61,15 +67,23 @@ public class OrderItemService {
 
     @Transactional
     public void update(int id, OrderItemPojo p) throws ApiException {
-        OrderItemPojo pojo= dao.select_id(id);
-        pojo.setSellingPrice(p.getSellingPrice());
 
-        InventoryPojo inventoryPojo=inventoryService.get(pojo.getProductId());
-        increaseInventory(inventoryPojo,pojo.getQuantity());
+        ProductPojo productPojo=productService.get(p.getProductId());
+        if(p.getSellingPrice()>productPojo.getMrp()){
+            throw new ApiException("Selling Price Can't be greater than Mrp");
+        }
 
-        decreaseInventory(inventoryPojo,p.getQuantity());
-        pojo.setQuantity(p.getQuantity());
-    }
+        else {
+            OrderItemPojo pojo = dao.select_id(id);
+            pojo.setSellingPrice(p.getSellingPrice());
+
+            InventoryPojo inventoryPojo = inventoryService.get(pojo.getProductId());
+            increaseInventory(inventoryPojo, pojo.getQuantity());
+
+            decreaseInventory(inventoryPojo, p.getQuantity());
+            pojo.setQuantity(p.getQuantity());
+        }
+        }
 //    @Transactional
 //    public void update(int orderId, List<OrderItemPojo> newPojos) throws ApiException {
 //        List<OrderItemPojo> pojos=dao.select(orderId); // Pojo list obtained by orderId
@@ -110,7 +124,7 @@ public class OrderItemService {
     private void decreaseInventory(InventoryPojo p, int quantity) throws ApiException {
         int inventoryQuantity=p.getQuantity();
         if(inventoryQuantity<quantity){
-            throw new ApiException("Sorry, this much quantity is not present");
+            throw new ApiException("Sorry, this much quantity is not present. Max Quantity: "+inventoryQuantity);
         }
         else 
             p.setQuantity(inventoryQuantity-quantity);

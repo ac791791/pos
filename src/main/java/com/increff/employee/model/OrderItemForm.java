@@ -8,7 +8,7 @@ public class OrderItemForm {
 
     private String barcode;
     private int quantity;
-    private int sellingPrice;
+    private double sellingPrice;
 
     public int getOrderId() {
         return orderId;
@@ -34,11 +34,11 @@ public class OrderItemForm {
         this.quantity = quantity;
     }
 
-    public int getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(int sellingPrice) {
+    public void setSellingPrice(double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 }

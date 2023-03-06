@@ -4,6 +4,8 @@ function getBrandUrl(){
 	return baseUrl + "/api/brand";
 }
 
+
+
 //BUTTON ACTIONS
 function addBrand(event){
 	//Set the values to update
@@ -147,17 +149,34 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="deleteButtons" onclick="deleteBrand(' + e.id + ')">Delete</button>'
+		var brandLength= (e.brand).length;
+		if(brandLength>20){
+		    var brand=(e.brand).slice(0,20)+'...';
+		}
+		else{ var brand=e.brand;}
+
+		var categoryLength=(e.category).length;
+		if(categoryLength>20){
+        	var category=(e.category).slice(0,20)+'...';
+        }
+        else{ var category=e.category;}
+
+		var buttonHtml = '<button class="deleteButtons" onclick="confirmDelete(' + e.id + ')">Delete</button>'
 		buttonHtml += ' <button class="tableButtons" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
+		+ '<td>' + brand + '</td>'
+		+ '<td>'  + category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
 }
 
+function confirmDelete(id) {
+  if (confirm("Are you sure you want to delete this Brand Category?")) {
+    deleteBrand(id);
+  }
+  }
 function displayEditBrand(id){
 	var url = getBrandUrl() + "/" + id;
 	$.ajax({
@@ -223,3 +242,12 @@ function init(){
 $(document).ready(init);
 $(document).ready(getBrandList);
 
+$(document).ready(function () {
+
+            $('ul.navbar-nav > li')
+                    .click(function (e) {
+                $('ul.navbar-nav > li')
+                    .removeClass('active');
+                $(this).addClass('active');
+            });
+        });

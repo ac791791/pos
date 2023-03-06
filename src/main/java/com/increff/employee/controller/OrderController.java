@@ -14,41 +14,44 @@ import java.util.List;
 
 @Api
 @RestController
-@RequestMapping("/api/order")
+
 public class OrderController {
 
     @Autowired
     private OrderDto dto;
 
-    @ApiOperation(value = "Adding a order")
-    @RequestMapping( method = RequestMethod.POST)
-    public void add(@RequestBody List<OrderForm> forms) throws ApiException {
-        dto.add(forms);
+
+    @ApiOperation(value = "Adding a Order like edit order")
+    @RequestMapping(path ="api/order/single",method = RequestMethod.POST)
+    public void addOrder(){
+        dto.addOrder();
     }
 
     @ApiOperation(value = "Deleting a order")
-    @RequestMapping(value ="/{orderId}",method = RequestMethod.DELETE)
+    @RequestMapping(path ="api/order/{orderId}",method = RequestMethod.DELETE)
     public void delete(@PathVariable int orderId){
         dto.delete(orderId);
     }
 
     @ApiOperation(value = "Getting a order by OrderId")
-    @RequestMapping(value ="/{orderId}", method = RequestMethod.GET)
+    @RequestMapping(path ="api/order/{orderId}", method = RequestMethod.GET)
     public OrderData get(@PathVariable int orderId){
         return dto.get(orderId);
     }
 
+    @ApiOperation(value = "Getting max order id")
+    @RequestMapping(path ="api/order/single",method = RequestMethod.GET)
+    public OrderData getMaxId(){
+        return dto.getMaxId();
+    }
+
+
     @ApiOperation(value = "Getting all orders")
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(path = "api/order",method = RequestMethod.GET)
     public List<OrderData> getAll(){
         return dto.getAll();
     }
 
-    @ApiOperation(value = "Updating a existing order")
-    @RequestMapping(value ="/{orderId}", method = RequestMethod.PUT)
-    private void update(@PathVariable int orderId, @RequestBody List<OrderForm> forms) throws ApiException {
-        dto.update(orderId,forms);
-    }
 
 
 }

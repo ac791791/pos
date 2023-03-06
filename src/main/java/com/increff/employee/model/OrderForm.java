@@ -17,17 +17,17 @@ public class OrderForm {
         this.quantity = quantity;
     }
 
-    public int getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(int sellingPrice) {
+    public void setSellingPrice(double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
     private String barcode;
     private int quantity;
-    private int sellingPrice;
+    private double sellingPrice;
 
 
 

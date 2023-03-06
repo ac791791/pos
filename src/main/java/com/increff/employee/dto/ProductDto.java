@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.increff.employee.util.ConvertFunction.*;
 
 @Repository
 public class ProductDto {
@@ -23,7 +24,7 @@ public class ProductDto {
     private BrandService brandService;
 
     public void add(ProductForm form) throws ApiException {
-        ProductPojo p= convert(form);
+        ProductPojo p= productConvert(form);
         normalize(p);
         service.add(p);
     }
@@ -34,7 +35,12 @@ public class ProductDto {
 
     public ProductData get(int id) {
         ProductPojo p= service.get(id);
-        return convert(p);
+        ProductData data= productConvert(p);
+        BrandPojo brandPojo= brandService.get(p.getbrandCategory());
+        data.setBrand(brandPojo.getBrand());
+        data.setCategory(brandPojo.getCategory());
+
+        return data;
     }
 
     public List<ProductData> getAll(){
@@ -42,7 +48,12 @@ public class ProductDto {
         List<ProductPojo> list2= service.getAll();
 
         for(ProductPojo p: list2) {
-            list1.add(convert(p));
+            ProductData data= productConvert(p);
+            BrandPojo brandPojo= brandService.get(p.getbrandCategory());
+            data.setBrand(brandPojo.getBrand());
+            data.setCategory(brandPojo.getCategory());
+
+            list1.add(data);
         }
         return list1;
     }
@@ -52,7 +63,7 @@ public class ProductDto {
     }
 
     public void update(int id, ProductForm form) {
-        service.update(id, convert(form));
+        service.update(id, productConvert(form));
     }
 
 
@@ -60,27 +71,6 @@ public class ProductDto {
 
 
     //Conversion Functions
-    protected ProductPojo convert(ProductForm f) {
-        ProductPojo p= new ProductPojo() ;
-        p.setBarcode(f.getBarcode());
-        p.setbrandCategory(f.getbrandCategory());
-        p.setName(f.getName());
-        p.setMrp(f.getMrp());
-        return p;
-    }
-
-    protected ProductData convert(ProductPojo p) {
-        BrandPojo brandPojo= brandService.get(p.getbrandCategory());
-        ProductData d= new ProductData();
-        d.setId(p.getId());
-        d.setBarcode(p.getBarcode());
-        d.setbrandCategory(p.getbrandCategory());
-        d.setName(p.getName());
-        d.setMrp(p.getMrp());
-        d.setBrand(brandPojo.getBrand());
-        d.setCategory(brandPojo.getCategory());
-        return d;
-    }
 
 
     protected static void normalize(ProductPojo p) {

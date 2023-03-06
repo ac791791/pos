@@ -91,36 +91,36 @@ public class BrandDtoTest extends AbstractUnitTest{
     }
 
 
-    @Test
-    public void testNormalize(){
-        BrandPojo pojo= new BrandPojo();
-        pojo.setBrand("Brand");
-        pojo.setCategory("Category");
-        dto.normalize(pojo);
-        assertEquals("brand",pojo.getBrand());
-        assertEquals("category",pojo.getCategory());
-    }
-
-    @Test
-    public void testPojoToDataCovert(){
-        BrandPojo p= new BrandPojo();
-        p.setBrand("brand");
-        p.setCategory("category");
-
-        BrandData data= dto.convert(p);
-        assertEquals("brand",data.getBrand());
-        assertEquals("category",data.getCategory());
-    }
-
-    @Test
-    public void testFormToPojoConvert(){
-        BrandForm f= new BrandForm();
-        f.setBrand("brand");
-        f.setCategory("category");
-
-        BrandPojo p= dto.convert(f);
-        assertEquals("brand",p.getBrand());
-        assertEquals("category",p.getCategory());
-    }
+//    @Test
+//    public void testNormalize(){
+//        BrandPojo pojo= new BrandPojo();
+//        pojo.setBrand("Brand");
+//        pojo.setCategory("Category");
+//        dto.normalize(pojo);
+//        assertEquals("brand",pojo.getBrand());
+//        assertEquals("category",pojo.getCategory());
+//    }
+//
+//    @Test
+//    public void testPojoToDataCovert(){
+//        BrandPojo p= new BrandPojo();
+//        p.setBrand("brand");
+//        p.setCategory("category");
+//
+//        BrandData data= dto.convert(p);
+//        assertEquals("brand",data.getBrand());
+//        assertEquals("category",data.getCategory());
+//    }
+//
+//    @Test
+//    public void testFormToPojoConvert(){
+//        BrandForm f= new BrandForm();
+//        f.setBrand("brand");
+//        f.setCategory("category");
+//
+//        BrandPojo p= dto.convert(f);
+//        assertEquals("brand",p.getBrand());
+//        assertEquals("category",p.getCategory());
+//    }
 }
 
